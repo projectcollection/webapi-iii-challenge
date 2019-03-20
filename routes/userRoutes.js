@@ -2,6 +2,7 @@ const express = require('express')
 
 const userDb = require('../data/helpers/userDb')
 const nameToUpperCase = require('../middlewares').nameToUpperCase
+const deleteUserPosts = require('../middlewares').deleteUserPosts
 
 const router = express.Router()
 
@@ -49,7 +50,7 @@ router.put('/:id', nameToUpperCase, async (req, res) => {
     }
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', deleteUserPosts, async (req, res) => {
     try{
         let count = await userDb.remove(req.params.id)
         if(count > 0){
@@ -58,6 +59,7 @@ router.delete('/:id', async (req, res) => {
             res.status(404).json({message: 'user not found'})
         }
     }catch(err){
+        console.log(err)
         res.status(500).json({message: 'internal server error'})
     }
 })
